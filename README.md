@@ -1,4 +1,4 @@
 toolbox-salat-example
 =====================
 
-Playground for figuring out how to de/serialize case classes generated dynamically generated with a Scala reflection toolbox 
+Playground for figuring out how to use dynamically generated classes as type parameters, as well as parse their scalaSigs.
