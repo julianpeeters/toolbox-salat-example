@@ -52,6 +52,8 @@ object Test extends App {
   val tb = cm.mkToolBox()
   val csym = define(tb, cdef())
   val obj = tb.eval(newc(csym))
+//End Gist
+
   val cls = obj.getClass()
 println(obj)
 
@@ -59,7 +61,7 @@ println(obj)
 //println(typeOf[Obj].typeSymbol) //type mismatch, found: Test.obj.type (with underlying type Any), req: AnyRef, can't cast
 
 val scalaSig = ScalaSigParser.parse(cls)
-  println(scalaSig)
+  println(scalaSig)//none
 
 
 }
