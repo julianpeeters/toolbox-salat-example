@@ -1,2 +1,9 @@
 ~run
 exit
+console
+consol
+console
+:javap -v G getClass
+exit
+compile :javap -v
+exit

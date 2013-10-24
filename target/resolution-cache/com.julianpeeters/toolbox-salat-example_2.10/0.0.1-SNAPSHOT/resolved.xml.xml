@@ -4,7 +4,7 @@
 		module="toolbox-salat-example_2.10"
 		revision="0.0.1-SNAPSHOT"
 		status="integration"
-		publication="20130712203705"
+		publication="20131024002454"
 	>
 		<description>
 		toolbox-salat-example
@@ -23,6 +23,7 @@
 		<conf name="sources" visibility="public" description=""/>
 		<conf name="docs" visibility="public" description=""/>
 		<conf name="pom" visibility="public" description=""/>
+		<conf name="scala-tool" visibility="private" description=""/>
 	</configurations>
 	<publications>
 		<artifact name="toolbox-salat-example_2.10" type="pom" ext="pom" conf="pom"/>
@@ -31,12 +32,11 @@
 		<artifact name="toolbox-salat-example_2.10" type="doc" ext="jar" conf="docs" e:classifier="javadoc"/>
 	</publications>
 	<dependencies>
-		<dependency org="org.scala-lang" name="scala-library" rev="2.10.1" conf="compile->default(compile)"/>
-		<dependency org="com.novus" name="salat_2.10" rev="1.9.2-SNAPSHOT" conf="compile->default(compile)"/>
-		<dependency org="org.slf4j" name="slf4j-simple" rev="1.6.4" conf="compile->default(compile)"/>
-		<exclude org="org.scala-lang" module="scala-library" artifact="*" type="jar" ext="*" matcher="exact"/>
-		<exclude org="org.scala-lang" module="scala-compiler" artifact="*" type="jar" ext="*" matcher="exact"/>
-		<override org="org.scala-lang" module="scala-library" matcher="exact" rev="2.10.1"/>
-		<override org="org.scala-lang" module="scala-compiler" matcher="exact" rev="2.10.1"/>
+		<dependency org="org.scala-lang" name="scala-compiler" rev="2.10.1" conf="scala-tool->default,optional(default)"/>
+		<dependency org="org.scala-lang" name="scala-library" rev="2.10.1" conf="scala-tool->default,optional(default);compile->default(compile)"/>
+		<dependency org="io.spray" name="spray-json_2.10" rev="1.2.5" conf="compile->default(compile)"/>
+		<dependency org="com.gensler" name="scalavro_2.10" rev="0.4.0" conf="compile->default(compile)"/>
+		<dependency org="org.ow2.asm" name="asm-all" rev="4.1" conf="compile->default(compile)"/>
+		<dependency org="com.novus" name="salat_2.10" rev="1.9.3" conf="compile->default(compile)"/>
 	</dependencies>
 </ivy-module>

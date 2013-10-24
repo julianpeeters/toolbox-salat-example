@@ -1,0 +1,47 @@
+[0m[[0minfo[0m] [0mLoading global plugins from /home/julianpeeters/.sbt/plugins[0m
+[0m[[0minfo[0m] [0mSet current project to toolbox-salat-example (in build file:/home/julianpeeters/toolbox-salat-example/)[0m
+[0m[[33mwarn[0m] [0mPotentially incompatible versions of dependencies of {file:/home/julianpeeters/toolbox-salat-example/}default-07fec5:[0m
+[0m[[33mwarn[0m] [0m   org.scala-lang: 2.10.2, 2.10.1, 2.10.0[0m
+[0m[[0minfo[0m] [0mCompiling 1 Scala source to /home/julianpeeters/toolbox-salat-example/target/scala-2.10/classes...[0m
+[0m[[0minfo[0m] [0mRunning Test [0m
+class __wrapper$947dbfa9364c4128b48a3309f1537ac0.C
+C
+None
+None
+Test.MyRecord
+ [] Dealiasing type alias String: String
+[0m[[31merror[0m] [0m(run-main) java.lang.ClassNotFoundException: no Java class corresponding to Test found[0m
+java.lang.ClassNotFoundException: no Java class corresponding to Test found
+	at scala.reflect.runtime.JavaMirrors$JavaMirror$$anonfun$classToJava$1.scala$reflect$runtime$JavaMirrors$JavaMirror$$anonfun$$noClass$1(JavaMirrors.scala:1146)
+	at scala.reflect.runtime.JavaMirrors$JavaMirror$$anonfun$classToJava$1.apply(JavaMirrors.scala:1171)
+	at scala.reflect.runtime.JavaMirrors$JavaMirror$$anonfun$classToJava$1.apply(JavaMirrors.scala:1145)
+	at scala.reflect.runtime.TwoWayCache.toJava(TwoWayCache.scala:49)
+	at scala.reflect.runtime.JavaMirrors$JavaMirror.classToJava(JavaMirrors.scala:1145)
+	at scala.reflect.runtime.JavaMirrors$JavaMirror.runtimeClass(JavaMirrors.scala:203)
+	at scala.reflect.runtime.JavaMirrors$JavaMirror.runtimeClass(JavaMirrors.scala:65)
+	at com.gensler.scalavro.types.AvroType$$anonfun$fromTypeHelper$1.apply(AvroType.scala:353)
+	at com.gensler.scalavro.types.AvroType$$anonfun$fromTypeHelper$1.apply(AvroType.scala:227)
+	at scala.util.Try$.apply(Try.scala:161)
+	at com.gensler.scalavro.types.AvroType$.fromTypeHelper(AvroType.scala:227)
+	at com.gensler.scalavro.types.AvroType$.fromType(AvroType.scala:223)
+	at com.gensler.scalavro.types.AvroType$.apply(AvroType.scala:217)
+	at Test$delayedInit$body.apply(Main.scala:160)
+	at scala.Function0$class.apply$mcV$sp(Function0.scala:40)
+	at scala.runtime.AbstractFunction0.apply$mcV$sp(AbstractFunction0.scala:12)
+	at scala.App$$anonfun$main$1.apply(App.scala:71)
+	at scala.App$$anonfun$main$1.apply(App.scala:71)
+	at scala.collection.immutable.List.foreach(List.scala:318)
+	at scala.collection.generic.TraversableForwarder$class.foreach(TraversableForwarder.scala:32)
+	at scala.App$class.main(App.scala:71)
+	at Test$.main(Main.scala:23)
+	at Test.main(Main.scala)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:616)
+[0m[[31mtrace[0m] [0mStack trace suppressed: run [34mlast compile:run[0m for the full output.[0m
+java.lang.RuntimeException: Nonzero exit code: 1
+	at scala.sys.package$.error(package.scala:27)
+[0m[[31mtrace[0m] [0mStack trace suppressed: run [34mlast compile:run[0m for the full output.[0m
+[0m[[31merror[0m] [0m(compile:[31mrun[0m) Nonzero exit code: 1[0m
+[0m[[31merror[0m] [0mTotal time: 19 s, completed Sep 23, 2013 11:20:08 PM[0m

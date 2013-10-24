@@ -3,7 +3,23 @@ import scala.reflect.runtime.{universe => ru}
 import scala.tools.reflect.ToolBox
 import scala.language.reflectiveCalls
 
+
+
 import scala.tools.scalap.scalax.rules.scalasig._
+
+import com.novus.salat._
+import com.novus.salat.global._
+import com.novus.salat.annotations.util._
+
+import scala.reflect.ScalaSignature
+import reflect.internal.pickling.ByteCodecs
+import reflect.internal.pickling.PickleFormat
+import reflect.internal.pickling.PickleBuffer
+import java.io._
+import com.gensler.scalavro.types.AvroType
+import com.gensler.scalavro.io.AvroTypeIO
+import scala.util.{Try, Success, Failure}
+
 
 
 object Test extends App {
@@ -54,15 +70,31 @@ object Test extends App {
   val obj = tb.eval(newc(csym))
 //End Gist
 
+  println(obj)
+
   val cls = obj.getClass()
-println(obj)
+    println(cls)
 
-//type Obj = obj.type
-//println(typeOf[Obj].typeSymbol) //type mismatch, found: Test.obj.type (with underlying type Any), req: AnyRef, can't cast
+  type MyRecord = cls.type
+////println(typeOf[cl].typeSymbol) //type mismatch, found: Test.obj.type (with underlying type Any), req: AnyRef, can't cast
 
+
+//No Scala Sig is available
 val scalaSig = ScalaSigParser.parse(cls)
   println(scalaSig)//none
+  println(cls.annotation[ScalaSignature])
 
+
+//Can't use it as a type parameter in neither Salat nor Scalavro
+//val dbo = grater[MyRecord].asDBObject(obj)//dynamic types still have incorrect underlying type of Any
+
+ // val myRecordType = AvroType[MyRecord]//java.lang.NoClassDefFoundError: no Java class corresponding to Test.cls.type found
+// println("schema: " + myRecordType.schema)
+
+
+
+//Maybe if Salat changes to parse with typeOf, we'll have a way
+//println(typeOf[Record].member(nme.CONSTRUCTOR)) //Constructor available for normal case class, but not my dumb parsed. how about eugene's using the toolbox??
 
 }
 
