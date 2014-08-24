@@ -3,27 +3,16 @@ import scala.reflect.runtime.{universe => ru}
 import scala.tools.reflect.ToolBox
 import scala.language.reflectiveCalls
 
-
-
-import scala.tools.scalap.scalax.rules.scalasig._
-
 import com.novus.salat._
 import com.novus.salat.global._
-import com.novus.salat.annotations.util._
-
-import scala.reflect.ScalaSignature
-import reflect.internal.pickling.ByteCodecs
-import reflect.internal.pickling.PickleFormat
-import reflect.internal.pickling.PickleBuffer
-import java.io._
-import com.gensler.scalavro.types.AvroType
-import com.gensler.scalavro.io.AvroTypeIO
-import scala.util.{Try, Success, Failure}
+import com.mongodb.casbah.Imports._
 
 
+case class T(s: String)
 
 object Test extends App {
-  def define(tb: ToolBox[ru.type], tree: ru.ImplDef): ru.Symbol = {
+
+  def define(tb: ToolBox[ru.type], tree: ru.ImplDef, namespace: String): ru.Symbol = {
     val compiler = tb.asInstanceOf[{ def compiler: scala.tools.nsc.Global }].compiler
     val importer = compiler.mkImporter(ru)
     val exporter = importer.reverse
@@ -31,7 +20,8 @@ object Test extends App {
     def defineInternal(ctree: compiler.ImplDef): compiler.Symbol = {
       import compiler._
  
-      val packageName = newTermName("__wrapper$" + java.util.UUID.randomUUID.toString.replace("-", ""))
+    //  val packageName = newTermName("__wrapper$" + java.util.UUID.randomUUID.toString.replace("-", ""))
+      val packageName = newTermName(namespace)
       val pdef = PackageDef(Ident(packageName), List(ctree))
       val unit = new CompilationUnit(scala.reflect.internal.util.NoSourceFile)
       unit.body = pdef
@@ -52,49 +42,26 @@ object Test extends App {
   import Flag._
   import scala.reflect.runtime.{currentMirror => cm}
  
-  def pendingSuperCall() = Apply(Select(Super(This(tpnme.EMPTY), tpnme.EMPTY), nme.CONSTRUCTOR), Nil)
-  // equivalent to q"class C"
-  def cdef() = ClassDef(
-    NoMods, newTypeName("C"), Nil,
-    Template(
-      List(Select(Ident(newTermName("scala")), newTypeName("AnyRef"))),
-      emptyValDef,
-      List(
-        DefDef(NoMods, nme.CONSTRUCTOR, Nil, List(Nil), TypeTree(), Block(List(pendingSuperCall()), Literal(Constant(())))),
-        DefDef(Modifiers(OVERRIDE), newTermName("toString"), Nil, Nil, TypeTree(), Literal(Constant("C")))
-    )))
-  def newc(csym: Symbol) = Apply(Select(New(Ident(csym)), nme.CONSTRUCTOR), List())
- 
+  def cdef() = q"case class C(v: String)"
+  def newc(csym: Symbol) = q"""${csym.companionSymbol}"""
   val tb = cm.mkToolBox()
-  val csym = define(tb, cdef())
+  val csym = define(tb, cdef(), "pkg")
+  //val csym = tb.define(cdef()) // for 2.11
   val obj = tb.eval(newc(csym))
-//End Gist
 
-  println(obj)
+  import scala.reflect.runtime._
 
-  val cls = obj.getClass()
-    println(cls)
+  val method_apply$ = obj.getClass.getMethod("apply", "".getClass)
+  val instantiated$ = method_apply$.invoke(obj,  "hello")
+  type Type = instantiated$.type
 
-  type MyRecord = cls.type
-////println(typeOf[cl].typeSymbol) //type mismatch, found: Test.obj.type (with underlying type Any), req: AnyRef, can't cast
+  val loader = (tb.asInstanceOf[scala.tools.reflect.ToolBoxFactory$ToolBoxImpl].classLoader)
+  ctx.registerClassLoader(loader)
+  val dbo = grater[Type].asDBObject(instantiated$)
+  println("back: " + grater[Type].asObject(dbo))
+  //println("back: " + grater[Type].asObject(dbo).v)//of course compiler chokes on v since it is not (yet?) a member of the type underlying the alias `Test.Type`. Perhaps use `Dynamic` 
 
-
-//No Scala Sig is available
-val scalaSig = ScalaSigParser.parse(cls)
-  println(scalaSig)//none
-  println(cls.annotation[ScalaSignature])
-
-
-//Can't use it as a type parameter in neither Salat nor Scalavro
-//val dbo = grater[MyRecord].asDBObject(obj)//dynamic types still have incorrect underlying type of Any
-
- // val myRecordType = AvroType[MyRecord]//java.lang.NoClassDefFoundError: no Java class corresponding to Test.cls.type found
-// println("schema: " + myRecordType.schema)
-
-
-
-//Maybe if Salat changes to parse with typeOf, we'll have a way
-//println(typeOf[Record].member(nme.CONSTRUCTOR)) //Constructor available for normal case class, but not my dumb parsed. how about eugene's using the toolbox??
 
 }
+
 
