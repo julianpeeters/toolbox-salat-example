@@ -7,6 +7,9 @@ import com.novus.salat._
 import com.novus.salat.global._
 import com.mongodb.casbah.Imports._
 
+import com.gensler.scalavro.types.AvroType
+
+
 
 case class T(s: String)
 
@@ -55,13 +58,53 @@ object Test extends App {
   val instantiated$ = method_apply$.invoke(obj,  "hello")
   type Type = instantiated$.type
 
+/*
+  //Salat
   val loader = (tb.asInstanceOf[scala.tools.reflect.ToolBoxFactory$ToolBoxImpl].classLoader)
   ctx.registerClassLoader(loader)
   val dbo = grater[Type].asDBObject(instantiated$)
-  println("back: " + grater[Type].asObject(dbo))
-  //println("back: " + grater[Type].asObject(dbo).v)//of course compiler chokes on v since it is not (yet?) a member of the type underlying the alias `Test.Type`. Perhaps use `Dynamic` 
+  val objj = grater[Type].asObject(dbo)
+  println(objj == instantiated$) //true
 
+  //println("back: " + grater[Type].asObject(dbo).v)//of course compiler chokes on v since it is not (yet?) a member of the type underlying the alias `Test.Type`. Perhaps use `Dynamic`? 
+*/
 
+  //Scalavro
+
+println(ru.typeOf[Type]) // returns: Test.Type
+println(AvroType[Type].schema) //returns: error
+/*
+[error] (run-main) java.lang.NoClassDefFoundError: no Java class corresponding to Test.instantiated$.type found
+java.lang.NoClassDefFoundError: no Java class corresponding to Test.instantiated$.type found
+	at scala.reflect.runtime.JavaMirrors$JavaMirror.typeToJavaClass(JavaMirrors.scala:1258)
+	at scala.reflect.runtime.JavaMirrors$JavaMirror.typeToJavaClass(JavaMirrors.scala:1256)
+	at scala.reflect.runtime.JavaMirrors$JavaMirror.runtimeClass(JavaMirrors.scala:202)
+	at scala.reflect.runtime.JavaMirrors$JavaMirror.runtimeClass(JavaMirrors.scala:65)
+	at com.gensler.scalavro.util.ReflectionHelpers$class.typeableSubTypesOf(ReflectionHelpers.scala:120)
+	at com.gensler.scalavro.util.ReflectionHelpers$.typeableSubTypesOf(ReflectionHelpers.scala:11)
+	at com.gensler.scalavro.types.AvroType$$anonfun$fromTypeHelper$1.apply(AvroType.scala:461)
+	at com.gensler.scalavro.types.AvroType$$anonfun$fromTypeHelper$1.apply(AvroType.scala:227)
+	at scala.util.Try$.apply(Try.scala:161)
+	at com.gensler.scalavro.types.AvroType$.fromTypeHelper(AvroType.scala:227)
+	at com.gensler.scalavro.types.AvroType$.fromType(AvroType.scala:223)
+	at com.gensler.scalavro.types.AvroType$.apply(AvroType.scala:217)
+	at Test$delayedInit$body.apply(Main.scala:71)
+	at scala.Function0$class.apply$mcV$sp(Function0.scala:40)
+	at scala.runtime.AbstractFunction0.apply$mcV$sp(AbstractFunction0.scala:12)
+	at scala.App$$anonfun$main$1.apply(App.scala:71)
+	at scala.App$$anonfun$main$1.apply(App.scala:71)
+	at scala.collection.immutable.List.foreach(List.scala:318)
+	at scala.collection.generic.TraversableForwarder$class.foreach(TraversableForwarder.scala:32)
+	at scala.App$class.main(App.scala:71)
+	at Test$.main(Main.scala:16)
+	at Test.main(Main.scala)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+[trace] Stack trace suppressed: run last compile:run for the full output.
+*/
+  
 }
 
 

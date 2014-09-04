@@ -22,7 +22,7 @@ libraryDependencies ++= Seq(
 "org.scalamacros" %% "quasiquotes" % "2.0.1",
 //  "io.spray" %%  "spray-json" % "1.2.5",
   //"com.julianpeeters" %% "asm-salat-example" % "0.1-SNAPSHOT",
- // "com.gensler" %% "scalavro" % "0.4.0",
+  "com.gensler" %% "scalavro" % "0.4.0",
   //"org.ow2.asm" % "asm-all" % "4.1",
   //"com.novus" %% "salat" % "1.9.3"
   "com.novus" %% "salat" % "1.9.8"
